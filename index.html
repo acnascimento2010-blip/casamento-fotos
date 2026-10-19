@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotos do Casamento - Layla e André</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <header>
+        <img src="img/monograma.png" alt="Monograma André e Layla" class="monograma">
+        <h1>Álbum dos Convidados</h1>
+        <p>Compartilhe os seus melhores momentos conosco!</p>
+    </header>
+
+    <!-- SEÇÃO DE UPLOAD -->
+    <section style="text-align: center;">
+        <h2>Envie suas fotos e vídeos</h2>
+        <p style="color: #555; margin-bottom: 25px;">
+            Ficou lindo? Registrou um momento divertido? Upe por aqui para que a gente possa guardar todas as memórias da nossa celebração! 📸❤️
+        </p>
+
+        <!-- Formulário de Envio -->
+        <form id="form-upload" style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+            
+            <label for="nome-convidado" style="align-self: flex-start; font-weight: 500;">Seu Nome:</label>
+            <input type="text" id="nome-convidado" placeholder="Digite seu nome..." required style="width: 100%; padding: 12px; border: 1px solid #e2d8c8; border-radius: 8px; background-color: #faf8f5;">
+
+            <label for="fotos-input" style="align-self: flex-start; font-weight: 500;">Escolha as fotos ou vídeos:</label>
+            <input type="file" id="fotos-input" accept="image/*,video/*" multiple required style="width: 100%; padding: 12px; border: 1px dashed #4a4238; border-radius: 8px; background-color: #faf8f5; cursor: pointer;">
+
+            <button type="submit" id="btn-enviar" style="margin-top: 10px;">Enviar Memórias 🚀</button>
+        </form>
+
+        <!-- Mensagem de Sucesso -->
+        <div id="sucesso-upload" style="display: none; margin-top: 20px; padding: 20px; background-color: #f0f7f0; border-radius: 8px; color: #2e7d32;">
+            <h3>✔ Fotos enviadas com sucesso!</h3>
+            <p>Muito obrigado por eternizar esse dia com a gente!</p>
+        </div>
+    </section>
+
+    <!-- SCRIPT DE INTERAÇÃO -->
+    <script>
+        const formUpload = document.getElementById('form-upload');
+        const sucessoUpload = document.getElementById('sucesso-upload');
+
+        formUpload.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-enviar');
+            btn.innerText = "Enviando...";
+            btn.disabled = true;
+
+            // Simulação de envio bem-sucedido (Depois podemos plugar o Cloudinary ou Google Apps Script)
+            setTimeout(() => {
+                formUpload.style.display = 'none';
+                sucessoUpload.style.display = 'block';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
