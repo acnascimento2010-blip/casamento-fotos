@@ -1,4 +1,48 @@
-<script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotos do Casamento - Layla e André</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <header>
+        <img src="img/monograma.png" alt="Monograma André e Layla" class="monograma">
+        <h1>Álbum dos Convidados</h1>
+        <p>Compartilhe os seus melhores momentos conosco!</p>
+    </header>
+
+    <!-- SEÇÃO DE UPLOAD -->
+    <section>
+        <h2>Envie suas fotos e vídeos</h2>
+        <p style="color: #555; text-align: center; margin-bottom: 25px;">
+            Ficou lindo? Registrou um momento divertido? Upe por aqui para que a gente possa guardar todas as memórias da nossa celebração! 📸❤️
+        </p>
+
+        <!-- Formulário de Envio -->
+        <form id="form-upload" style="display: flex; flex-direction: column; gap: 15px;">
+            
+            <label for="nome-convidado" style="font-weight: 500;">Seu Nome:</label>
+            <input type="text" id="nome-convidado" placeholder="Digite seu nome..." required>
+
+            <label for="fotos-input" style="font-weight: 500;">Escolha a foto ou vídeo:</label>
+            <input type="file" id="fotos-input" accept="image/*,video/*" required style="border: 1px dashed #4a4238; cursor: pointer;">
+
+            <button type="submit" id="btn-enviar" style="margin-top: 10px;">Enviar Memórias 🚀</button>
+        </form>
+
+        <!-- Mensagem de Sucesso -->
+        <div id="sucesso-upload" style="display: none; text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f7f0; border-radius: 8px; color: #2e7d32;">
+            <h3 style="margin-top: 0; color: #2e7d32;">✔ Memória enviada com sucesso!</h3>
+            <p style="margin-bottom: 0;">Muito obrigado por eternizar esse dia com a gente!</p>
+        </div>
+    </section>
+
+    <!-- SCRIPT DE ENVIO DIRETO PARA O GOOGLE DRIVE -->
+    <script>
         const formUpload = document.getElementById('form-upload');
         const sucessoUpload = document.getElementById('sucesso-upload');
 
@@ -26,7 +70,7 @@
                     nome: nome
                 };
 
-                // URL DO SEU GOOGLE APPS SCRIPT
+                // Cole aqui a URL do Web App gerada no seu Google Apps Script
                 const urlScript = 'https://script.google.com/macros/s/AKfycbwyiqluZLpMC-se2oEgPAdVfUJ-EIlHfK81RhPoi0YNtm67p5yFQ8NNowdhDVAziU_f/exec';
 
                 fetch(urlScript, {
@@ -46,3 +90,5 @@
             reader.readAsDataURL(file);
         });
     </script>
+</body>
+</html>
