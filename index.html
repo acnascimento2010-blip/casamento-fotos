@@ -28,25 +28,26 @@
             <label for="nome-convidado" style="font-weight: 500;">Seu Nome:</label>
             <input type="text" id="nome-convidado" placeholder="Digite seu nome..." required>
 
-            <label for="fotos-input" style="font-weight: 500;">Escolha a foto ou vídeo:</label>
-            <input type="file" id="fotos-input" accept="image/*,video/*" required style="border: 1px dashed #4a4238; cursor: pointer;">
+            <!-- Adicionamos o 'multiple' aqui para aceitar várias fotos -->
+            <label for="fotos-input" style="font-weight: 500;">Escolha as fotos ou vídeos:</label>
+            <input type="file" id="fotos-input" accept="image/*,video/*" multiple required style="border: 1px dashed #4a4238; cursor: pointer;">
 
             <button type="submit" id="btn-enviar" style="margin-top: 10px;">Enviar Memórias 🚀</button>
         </form>
 
         <!-- Mensagem de Sucesso -->
         <div id="sucesso-upload" style="display: none; text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f7f0; border-radius: 8px; color: #2e7d32;">
-            <h3 style="margin-top: 0; color: #2e7d32;">✔ Memória enviada com sucesso!</h3>
+            <h3 style="margin-top: 0; color: #2e7d32;">✔ Memórias enviadas com sucesso!</h3>
             <p style="margin-bottom: 0;">Muito obrigado por eternizar esse dia com a gente!</p>
         </div>
     </section>
 
-    <!-- SCRIPT DE ENVIO DIRETO PARA O GOOGLE DRIVE -->
+    <!-- SCRIPT DE ENVIO MÚLTIPLO PARA O GOOGLE DRIVE -->
     <script>
         const formUpload = document.getElementById('form-upload');
         const sucessoUpload = document.getElementById('sucesso-upload');
 
-        formUpload.addEventListener('submit', function(e) {
+        formUpload.addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-enviar');
             const nome = document.getElementById('nome-convidado').value;
@@ -54,41 +55,41 @@
             
             if (fileInput.files.length === 0) return;
 
-            btn.innerText = "Enviando memórias...";
+            const totalArquivos = fileInput.files.length;
             btn.disabled = true;
 
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function(event) {
-                const base64Data = event.target.result.split(',')[1];
+            // Envia cada arquivo um por um de forma organizada
+            for (let i = 0; i < totalArquivos; i++) {
+                btn.innerText = `Enviando ${i + 1} de ${totalArquivos}...`;
+                const file = fileInput.files[i];
                 
-                const dados = {
-                    fileData: base64Data,
-                    mimeType: file.type,
-                    fileName: file.name,
-                    nome: nome
-                };
+                await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const base64Data = event.target.result.split(',')[1];
+                        
+                        const dados = {
+                            fileData: base64Data,
+                            mimeType: file.type,
+                            fileName: file.name,
+                            nome: nome
+                        };
 
-                // URL DO SEU GOOGLE APPS SCRIPT ATUALIZADO
-                const urlScript = 'https://script.google.com/macros/s/AKfycbzgTcMg7Im7e2ZNbk8J-m-J8TBi_1YXO153O5Mms_w_qAsjPTphPMZywDjgr9iI-DO7tg/exec';
+                        const urlScript = 'https://script.google.com/macros/s/AKfycbzNVF7JcPrS1Q7mUP-XIcM0baJxzF34a5Cx0qzn9EiGaDWTIz66wqFbvi7U4VC2TWTDQg/exec';
 
-                fetch(urlScript, {
-                    method: 'POST',
-                    body: JSON.stringify(dados)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    formUpload.style.display = 'none';
-                    sucessoUpload.style.display = 'block';
-                })
-                .catch(error => {
-                    formUpload.style.display = 'none';
-                    sucessoUpload.style.display = 'block';
+                        fetch(urlScript, {
+                            method: 'POST',
+                            body: JSON.stringify(dados)
+                        })
+                        .then(() => resolve())
+                        .catch(() => resolve()); // Continua mesmo se houver falha pontual em um arquivo
+                    };
+                    reader.readAsDataURL(file);
                 });
-            };
+            }
 
-            reader.readAsDataURL(file);
+            formUpload.style.display = 'none';
+            sucessoUpload.style.display = 'block';
         });
     </script>
 </body>
